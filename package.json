@@ -1,0 +1,13 @@
+{
+  "name": "kirghizasia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Новая версия сайта турфирмы KirghizAsia (Кыргызстан, с 2007)",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
