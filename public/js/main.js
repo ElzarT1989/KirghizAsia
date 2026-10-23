@@ -2,6 +2,7 @@
    карточки туров с фильтром и окном, форма заявки → WhatsApp. WebGL-сцены лежат в hero.js и topo.js. */
 import { DICT, TOURS, SEASONS, PHONE } from '/js/i18n.js';
 import { initHero } from '/js/hero.js';
+import { initFx, splitHeadings, CARD_FOCUS } from '/js/fx.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -54,6 +55,7 @@ function applyLang(l, persist) {
   heroCtl?.relabel();
   setCaption(heroIdx, false);
   measureHS();
+  splitHeadings();
 }
 
 /* ───────── подпись к слайду героя ───────── */
@@ -176,7 +178,7 @@ function renderTours(animate = true) {
   grid.innerHTML = list.map((x, i) => {
     const price = x.price == null ? `<b>${t('tour.quote')}</b>` : `<small>${t('tour.from')}</small><b>${money(x.price)}</b>`;
     return `<article class="card"${animate ? ` style="--i:${i}"` : ' style="animation:none"'}>
-      <span class="card-img"><img src="/img/${x.img}.webp" alt="" loading="lazy" decoding="async"><span class="card-badge">${t('tour.badge')}</span></span>
+      <span class="card-img"><img src="/img/${x.img}.webp" alt="" loading="lazy" decoding="async" style="object-position:${CARD_FOCUS[x.img] || '50% 50%'}"><span class="card-badge">${t('tour.badge')}</span></span>
       <div class="card-body">
         <span class="card-cat">${t('f.' + x.cat)}</span>
         <h3><button type="button" class="card-open" data-id="${x.id}">${t('t.' + x.id + '.t')}</button></h3>
@@ -201,6 +203,7 @@ function fillModal(id) {
   if (!x) return;
   const title = t('t.' + id + '.t');
   $('#tmImg').src = `/img/${x.img}.webp`;
+  $('#tmImg').style.objectPosition = CARD_FOCUS[x.img] || '50% 50%';
   $('#tmTag').textContent = t('f.' + x.cat);
   $('#tmTitle').textContent = title;
   $('#tmDesc').textContent = t('t.' + id + '.d');
@@ -265,6 +268,8 @@ try {
 } catch (err) {
   console.warn('hero', err);
 }
+
+initFx({ bar, grid });
 
 // фон «направление» (карта горизонталей) подгружаем, когда блок рядом
 {
